@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h2>My Complaints</h2>
+  <table class="table">
+    <tr><th>#</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Created</th></tr>
+    {% for c in complaints %}
+      <tr>
+        <td>{{ c.id }}</td>
+        <td><a href="{{ url_for('complaint_detail', complaint_id=c.id) }}">{{ c.title }}</a></td>
+        <td>{{ c.category }}</td>
+        <td>{{ c.priority }}</td>
+        <td>
+          {% set s = c.status %}
+          <span class="badge {{ 'submitted' if s=='Submitted' else ('inprogress' if s=='In Progress' else ('resolved' if s=='Resolved' else 'closed')) }}">{{ s }}</span>
+        </td>
+        <td>{{ c.created_at }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

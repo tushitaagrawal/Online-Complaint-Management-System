@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h1>Online Complaint Management System</h1>
+  <p>Submit, track, and resolve complaints with transparency.</p>
+  <div style="margin-top:16px;">
+    {% if not session.get('user_id') %}
+      <a class="btn" href="{{ url_for('register') }}">Get Started</a>
+      <a class="btn secondary" href="{{ url_for('login') }}">Login</a>
+    {% else %}
+      {% if session.get('role') == 'admin' %}
+        <a class="btn" href="{{ url_for('admin_dashboard') }}">Go to Admin Dashboard</a>
+      {% else %}
+        <a class="btn" href="{{ url_for('dashboard') }}">Go to Dashboard</a>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+

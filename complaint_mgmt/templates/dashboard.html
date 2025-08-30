@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h2>My Dashboard</h2>
+  <div class="cards">
+    <div class="card"><strong>Submitted:</strong> {{ counts.submitted or 0 }}</div>
+    <div class="card"><strong>In Progress:</strong> {{ counts.in_progress or 0 }}</div>
+    <div class="card"><strong>Resolved/Closed:</strong> {{ counts.resolved or 0 }}</div>
+  </div>
+  <div style="margin:16px 0;">
+    <a class="btn" href="{{ url_for('submit_complaint') }}">Submit New Complaint</a>
+    <a class="btn secondary" href="{{ url_for('my_complaints') }}">View All Complaints</a>
+  </div>
+  <h3>Latest Complaints</h3>
+  <table class="table">
+    <tr><th>#</th><th>Title</th><th>Category</th><th>Priority</th><th>Status</th><th>Created</th></tr>
+    {% for c in latest %}
+      <tr>
+        <td>{{ c.id }}</td>
+        <td><a href="{{ url_for('complaint_detail', complaint_id=c.id) }}">{{ c.title }}</a></td>
+        <td>{{ c.category }}</td>
+        <td>{{ c.priority }}</td>
+        <td>
+          {% set s = c.status %}
+          <span class="badge {{ 'submitted' if s=='Submitted' else ('inprogress' if s=='In Progress' else ('resolved' if s=='Resolved' else 'closed')) }}">{{ s }}</span>
+        </td>
+        <td>{{ c.created_at }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

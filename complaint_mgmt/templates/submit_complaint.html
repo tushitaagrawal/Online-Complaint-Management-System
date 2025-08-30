@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h2>Submit Complaint</h2>
+  <form method="post">
+    <label>Title</label>
+    <input class="input" name="title" required />
+
+    <label>Category</label>
+    <select name="category">
+      <option>General</option>
+      <option>Hostel</option>
+      <option>Library</option>
+      <option>IT Services</option>
+      <option>Maintenance</option>
+      <option>Academic</option>
+    </select>
+
+    <label>Priority</label>
+    <select name="priority">
+      <option>Low</option>
+      <option selected>Medium</option>
+      <option>High</option>
+    </select>
+
+    <label>Description</label>
+    <textarea name="description" rows="6" required></textarea>
+
+    <button class="btn" type="submit">Submit</button>
+  </form>
+</div>
+{% endblock %}

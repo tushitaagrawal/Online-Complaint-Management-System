@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Complaint Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+</head>
+<body>
+  <div class="nav">
+    <div>
+      <strong>ComplaintMgmt</strong>
+    </div>
+    <div>
+      {% if session.get('user_id') %}
+        <span>Hello, {{ session.get('name') }}</span>
+        {% if session.get('role') == 'admin' %}
+          <a href="{{ url_for('admin_dashboard') }}">Admin</a>
+        {% else %}
+          <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        {% endif %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </div>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="container">
+        {% for category, message in messages %}
+          <div class="card">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}
+    {{ content|safe if content }}
+  {% endblock %}
+
+  <div class="footer">© {{ 2025 }} ComplaintMgmt · Flask + MySQL</div>
+</body>
+</html>

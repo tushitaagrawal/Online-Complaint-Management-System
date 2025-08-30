@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h2>Complaint #{{ comp.id }} – {{ comp.title }}</h2>
+  <p><strong>Category:</strong> {{ comp.category }} &nbsp; | &nbsp; <strong>Priority:</strong> {{ comp.priority }}</p>
+  <p><strong>Status:</strong> {{ comp.status }} &nbsp; | &nbsp; <strong>Created:</strong> {{ comp.created_at }}</p>
+  <p>{{ comp.description }}</p>
+
+  <h3>History</h3>
+  <table class="table">
+    <tr><th>When</th><th>By</th><th>Old → New</th><th>Note</th></tr>
+    {% for h in history %}
+    <tr>
+      <td>{{ h.action_at }}</td>
+      <td>{{ h.actor_name }}</td>
+      <td>{{ h.old_status }} → {{ h.new_status }}</td>
+      <td>{{ h.note }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">No history yet.</td></tr>
+    {% endfor %}
+  </table>
+
+  {% if comp.status in ['Resolved','Closed'] %}
+  <h3>Leave Feedback</h3>
+  {% if fb %}
+    <p>You rated: <strong>{{ fb.rating }}/5</strong></p>
+    <form method="post" action="{{ url_for('leave_feedback', complaint_id=comp.id) }}">
+      <label>Update Rating (1-5)</label>
+      <input class="input" name="rating" type="number" min="1" max="5" value="{{ fb.rating }}" required />
+      <label>Comments</label>
+      <textarea name="comments" rows="4">{{ fb.comments }}</textarea>
+      <button class="btn" type="submit">Update Feedback</button>
+    </form>
+  {% else %}
+    <form method="post" action="{{ url_for('leave_feedback', complaint_id=comp.id) }}">
+      <label>Rating (1-5)</label>
+      <input class="input" name="rating" type="number" min="1" max="5" required />
+      <label>Comments</label>
+      <textarea name="comments" rows="4"></textarea>
+      <button class="btn" type="submit">Submit Feedback</button>
+    </form>
+  {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

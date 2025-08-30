@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h2>Admin Dashboard</h2>
+  <div class="cards">
+    <div class="card"><strong>Submitted:</strong> {{ counts.submitted or 0 }}</div>
+    <div class="card"><strong>In Progress:</strong> {{ counts.in_progress or 0 }}</div>
+    <div class="card"><strong>Resolved:</strong> {{ counts.resolved or 0 }}</div>
+    <div class="card"><strong>Closed:</strong> {{ counts.closed or 0 }}</div>
+  </div>
+
+  <div style="margin:16px 0;">
+    <form method="get" style="display:flex; gap:8px; align-items:center;">
+      <label>Filter by status</label>
+      <select name="status">
+        <option value="">All</option>
+        <option {% if filter_status=='Submitted' %}selected{% endif %}>Submitted</option>
+        <option {% if filter_status=='In Progress' %}selected{% endif %}>In Progress</option>
+        <option {% if filter_status=='Resolved' %}selected{% endif %}>Resolved</option>
+        <option {% if filter_status=='Closed' %}selected{% endif %}>Closed</option>
+      </select>
+      <button class="btn secondary" type="submit">Apply</button>
+    </form>
+  </div>
+
+  <table class="table">
+    <tr><th>#</th><th>Title</th><th>User</th><th>Category</th><th>Priority</th><th>Status</th><th>Created</th></tr>
+    {% for c in complaints %}
+    <tr>
+      <td>{{ c.id }}</td>
+      <td><a href="{{ url_for('admin_complaint_detail', complaint_id=c.id) }}">{{ c.title }}</a></td>
+      <td>{{ c.user_name }} ({{ c.email }})</td>
+      <td>{{ c.category }}</td>
+      <td>{{ c.priority }}</td>
+      <td>{{ c.status }}</td>
+      <td>{{ c.created_at }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}
